@@ -4,6 +4,7 @@
 
 #include <QtQuick>
 #include <QDebug>
+#include <QApplication>
 
 #define rust_fun extern "C"
 
@@ -24,7 +25,7 @@ rust_fun QrsApplicationEngine *qmlrs_create_engine_headless() {
 }
 
 rust_fun QrsApplicationEngine *qmlrs_create_engine() {
-    if (!QGuiApplication::instance()) {
+    if (!QApplication::instance()) {
         char *arg = (char *)malloc(13);
         strcpy(arg, "qmlrswrapper");
         char **argp = (char **)malloc(sizeof(char *));
@@ -33,7 +34,7 @@ rust_fun QrsApplicationEngine *qmlrs_create_engine() {
         int *argc = (int *)malloc(sizeof(int));
         *argc = 1;
 
-        new QGuiApplication(*argc, argp);
+        new QApplication(*argc, argp);
     }
 
     return new QrsApplicationEngine();
@@ -92,7 +93,7 @@ rust_fun QVariant *qmlrs_varlist_get(const QVariantList *list, unsigned int i) {
 }
 
 rust_fun void qmlrs_app_exec() {
-    QGuiApplication::exec();
+    QApplication::exec();
 }
 
 rust_fun void qmlrs_variant_set_int64(QVariant *v, int64_t x) {
